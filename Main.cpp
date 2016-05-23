@@ -94,7 +94,7 @@ int main(int argc, char const *argv[])
 	}
 	if (Victoria == -1)
 	{
-		cout << "Usted es un Perdedor."
+		cout << "Usted es un Perdedor." << endl;
 	}else if (Victoria == 0)
 	{
 		UsuarioApuesta = UsuarioApuesta * 250;
@@ -467,7 +467,6 @@ void EvaluaPares(string mano[],bool gane[]){
 		{
 			color1++;
 			prueba = posiciones[i] + 13;
-			cout << prueba << endl;
 			for (int j = 0; j < 5; j++)
 			{
 				if (prueba == posiciones[j])
@@ -501,7 +500,6 @@ void EvaluaPares(string mano[],bool gane[]){
 		{
 			color2++;
 			prueba = posiciones[i] - 13;
-			cout << prueba << endl;
 			for (int j = 0; j < 5; j++)
 			{
 				if (prueba == posiciones[j])
@@ -535,7 +533,6 @@ void EvaluaPares(string mano[],bool gane[]){
 		{
 			color3++;
 			prueba = posiciones[i] - 13;
-			cout << prueba << endl;
 			for (int j = 0; j < 5; j++)
 			{
 				if (prueba == posiciones[j])
@@ -569,7 +566,6 @@ void EvaluaPares(string mano[],bool gane[]){
 		{
 			color4++; 
 			prueba = posiciones[i] - 13;
-			cout << prueba << endl;
 			for (int j = 0; j < 5; j++)
 			{
 				if (prueba == posiciones[j])
@@ -720,11 +716,6 @@ bool Escalera(string mano[]){
 				numerosDeCartas[w + 1] = temp;
 			}
 		}
-	}
-
-	for (int z = 0; z < 5; ++z)
-	{
-		cout << numerosDeCartas[z] << "\t";
 	}
 
 	if ((numerosDeCartas[1] == (numerosDeCartas[0] + 1)) && (numerosDeCartas[2] == (numerosDeCartas[1] + 1)) && (numerosDeCartas[3] == (numerosDeCartas[2] + 1)) && (numerosDeCartas[4] == (numerosDeCartas[3] + 1)))

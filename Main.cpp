@@ -16,8 +16,9 @@ bool Escalera(string[]);
 
 int main(int argc, char const *argv[])
 {
-	int DineroUsuario;
+	int DineroUsuario = 0;
 	int UsuarioApuesta = 0;
+	int GuardaDinero = 0;
 
 	//Verificadores de gane.
 	/*
@@ -29,129 +30,155 @@ int main(int argc, char const *argv[])
 	string cartas[52] = {"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC","AP","2P","3P","4P","5P","6P","7P","8P","9P","10P","JP","QP","KP","AD","2D","3D","4D","5D","6D","7D","8D","9D","10D","JD","QD","KD","AT","2T","3T","4T","5T","6T","7T","8T","9T","10T","JT","QT","KT"};
 	string mano[5] = {};
 	string juego1[5] = {};
+
 	
-	//Inicio de juego.
-	cout << "Ingrese cuanto de dinero tiene: " << endl;
-	cin >> DineroUsuario;
-	cout << "Cuanto dinero quiere apostar?: " << endl;
-	cin >> UsuarioApuesta;
-	while(UsuarioApuesta > DineroUsuario){
-		cout << "No tiene fondos para la apuesta." << endl;
-		cout << "--------------------------------" << endl;
-		cout << "Cuanto dinero quiere apostar?: " << endl;
-		cin >> UsuarioApuesta;
-	}
+
+	int opcion;
+	while(opcion != 3){
+		cout << "Seleccione una opcion\n1.Nuevo Juego\n2.Guarda Dinero\n3.Salir." << endl;
+		cin >> opcion;
+		if (opcion == 1)
+		{
+			DineroUsuario = 0;
+			GuardaDinero = 0;
+			//Inicio de juego.
+			cout << "Ingrese cuanto de dinero tiene: " << endl;
+			cin >> DineroUsuario;
+			cout << "Cuanto dinero quiere apostar?: " << endl;
+			cin >> UsuarioApuesta;
+			while(UsuarioApuesta > DineroUsuario){
+				cout << "No tiene fondos para la apuesta." << endl;
+				cout << "--------------------------------" << endl;
+				cout << "Cuanto dinero quiere apostar?: " << endl;
+				cin >> UsuarioApuesta;
+			}
 	//Automaticamente ya la apuesta no forma parte del dinero de El/Ella.
-	DineroUsuario = DineroUsuario - UsuarioApuesta;
+			DineroUsuario = DineroUsuario - UsuarioApuesta;
 
 	//Jugar llenando la mano.
-	int tamanoMano = 5;
-	mostrar1(cartas,juego1,tamanoMano);
-	for (int i = 0; i < 5; ++i)
-	{
-		cout << juego1[i] << "\t";
-	}
-	cout << endl;
-	cout << "Cuantas cartas quiere?: " << endl;
-	cin >> tamanoMano;
-	if (tamanoMano < 5)
-	{
-		Selecion(juego1,mano,tamanoMano);
-		int cartasRestantes = 5 - tamanoMano;
-		mostrar1(cartas,juego1,cartasRestantes);
-		for (int i = 0; i < cartasRestantes; i++)
-		{
-			mano[tamanoMano + i] = juego1[i];
-		}
-	}
-	for (int i = 0; i < 5; ++i)
-	{
-		cout << mano[i] << "\t";
-	}
-	cout << endl;
+			int tamanoMano = 5;
+			mostrar1(cartas,juego1,tamanoMano);
+			for (int i = 0; i < 5; ++i)
+			{
+				cout << juego1[i] << "\t";
+			}
+			cout << endl;
+			cout << "Cuantas cartas quiere?: " << endl;
+			cin >> tamanoMano;
+			if (tamanoMano < 5)
+			{
+				Selecion(juego1,mano,tamanoMano);
+				int cartasRestantes = 5 - tamanoMano;
+				mostrar1(cartas,juego1,cartasRestantes);
+				for (int i = 0; i < cartasRestantes; i++)
+				{
+					mano[tamanoMano + i] = juego1[i];
+				}
+			}
+			for (int i = 0; i < 5; ++i)
+			{
+				cout << mano[i] << "\t";
+			}
+			cout << endl;
 	//Juega con los dos turnos.
-	mano[0] = "JC";
-	mano[1] = "JD";
-	mano[2] = "6T";
-	mano[3] = "6C";
-	mano[4] = "3D";
+			mano[0] = "JC";
+			mano[1] = "JD";
+			mano[2] = "6T";
+			mano[3] = "6C";
+			mano[4] = "3D";
 
-	verificar[0] = GaneRoyal(mano);
-	verificar[1] = GaneEscaleraColor(mano);
-	verificar[5] = Escalera(mano);
-	EvaluaPares(mano,verificar);
+			verificar[0] = GaneRoyal(mano);
+			verificar[1] = GaneEscaleraColor(mano);
+			verificar[5] = Escalera(mano);
+			EvaluaPares(mano,verificar);
 
-	int Victoria = -1;
+			int Victoria = -1;
 
-	for (int i = 0; i < 9; ++i)
-	{
-		if (verificar[i] == true)
+			for (int i = 0; i < 9; ++i)
+			{
+				if (verificar[i] == true)
+				{
+					cout << "Gano " << i;
+					Victoria = i;
+					break;
+				}
+			}
+			if (Victoria == -1)
+			{
+				cout << "Usted es un Perdedor." << endl;
+			}else if (Victoria == 0)
+			{
+				UsuarioApuesta = UsuarioApuesta * 250;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 1)
+			{
+				UsuarioApuesta = UsuarioApuesta * 50;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 2)
+			{
+				UsuarioApuesta = UsuarioApuesta * 25;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 3)
+			{
+				UsuarioApuesta = UsuarioApuesta * 6;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 4)
+			{
+				UsuarioApuesta = UsuarioApuesta * 5;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 5)
+			{
+				UsuarioApuesta = UsuarioApuesta * 4;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 6)
+			{
+				UsuarioApuesta = UsuarioApuesta * 3;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta;
+				cout << "Su nuevo Fondo es: " << DineroUsuario;
+			}else if (Victoria == 7)
+			{
+				UsuarioApuesta = UsuarioApuesta * 2;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta << endl;
+				cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
+			}else if (Victoria == 8)
+			{
+				UsuarioApuesta = UsuarioApuesta * 1;
+				DineroUsuario = DineroUsuario + UsuarioApuesta;
+				GuardaDinero = GuardaDinero + DineroUsuario;
+				cout << "Ha ganado: " << UsuarioApuesta << endl;
+				cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
+			}
+
+			cout << endl;
+		}else if (opcion == 2)
 		{
-			cout << "Gano " << i;
-			Victoria = i;
-			break;
+			cout << "Ha guardado su dinero. :3" << endl;
+			DineroUsuario = GuardaDinero + DineroUsuario;
 		}
 	}
-	if (Victoria == -1)
-	{
-		cout << "Usted es un Perdedor." << endl;
-	}else if (Victoria == 0)
-	{
-		UsuarioApuesta = UsuarioApuesta * 250;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 1)
-	{
-		UsuarioApuesta = UsuarioApuesta * 50;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 2)
-	{
-		UsuarioApuesta = UsuarioApuesta * 25;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 3)
-	{
-		UsuarioApuesta = UsuarioApuesta * 6;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 4)
-	{
-		UsuarioApuesta = UsuarioApuesta * 5;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 5)
-	{
-		UsuarioApuesta = UsuarioApuesta * 4;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 6)
-	{
-		UsuarioApuesta = UsuarioApuesta * 3;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta;
-		cout << "Su nuevo Fondo es: " << DineroUsuario;
-	}else if (Victoria == 7)
-	{
-		UsuarioApuesta = UsuarioApuesta * 2;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta << endl;
-		cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
-	}else if (Victoria == 8)
-	{
-		UsuarioApuesta = UsuarioApuesta * 1;
-		DineroUsuario = DineroUsuario + UsuarioApuesta;
-		cout << "Ha ganado: " << UsuarioApuesta << endl;
-		cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
-	}
-
-	cout << endl;
+	
+	
 	return 0;
 }
 
@@ -725,4 +752,3 @@ bool Escalera(string mano[]){
 		return false;
 	}
 }
-

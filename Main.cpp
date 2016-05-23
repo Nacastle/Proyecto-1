@@ -10,15 +10,20 @@ using std::cin;
 void mostrar1(string[],string[],int);
 void Selecion(string[],string[],int);
 bool GaneRoyal(string[]);
-bool GanePoker(string[]);
-void EvaluaPares(string[]);
+void EvaluaPares(string[],bool[]);
 bool GaneEscaleraColor(string[]);
-void Escalera(string[]);
+bool Escalera(string[]);
 
 int main(int argc, char const *argv[])
 {
 	int DineroUsuario;
 	int UsuarioApuesta;
+
+	//Verificadores de gane.
+	/*
+	Las posiciones van ordenadas de manera que la posicion 0 = evaluara Escalera real y asi sucesivamente con el 1 = Escalera de color y asi consecutivamente hasta el de pareja si no es ninguno de ellos automaticamente perdera.
+	*/
+	bool verificar[9] = {false,false,false,false,false,false,false,false,false};
 
 	//Variables de juego.
 	string cartas[52] = {"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC","AP","2P","3P","4P","5P","6P","7P","8P","9P","10P","JP","QP","KP","AD","2D","3D","4D","5D","6D","7D","8D","9D","10D","JD","QD","KD","AT","2T","3T","4T","5T","6T","7T","8T","9T","10T","JT","QT","KT"};
@@ -51,14 +56,27 @@ int main(int argc, char const *argv[])
 	}
 	cout << endl;
 	//Juega con los dos turnos.
-	mano[0] = "AC";
-	mano[1] = "2P";
-	mano[2] = "3P";
-	mano[3] = "4D";
-	mano[4] = "5T";
-	Escalera(mano);
-	//EvaluaPares(mano);
+	mano[0] = "JC";
+	mano[1] = "JD";
+	mano[2] = "6T";
+	mano[3] = "6C";
+	mano[4] = "3D";
 
+	verificar[0] = GaneRoyal(mano);
+	verificar[1] = GaneEscaleraColor(mano);
+	verificar[5] = Escalera(mano);
+	EvaluaPares(mano,verificar);
+
+	for (int i = 0; i < 9; ++i)
+	{
+		if (verificar[i] == true)
+		{
+			cout << "Gano " << i;
+			break;
+		}
+	}
+
+	cout << endl;
 	return 0;
 }
 
@@ -123,7 +141,7 @@ bool GaneRoyal(string mano[]){
 			}
 		}
 	}
-	if (contador1 == 5 || contador2 == 5 || contador3 == 5 || contador4 == 5)
+	if (contador1 == 6 || contador2 == 6 || contador3 == 6 || contador4 == 6)
 	{
 		return true;
 	}
@@ -349,105 +367,7 @@ bool GaneEscaleraColor(string mano[]){
 	}
 }
 
-bool GanePoker(string mano[]){
-	string Cuarteto1[4] = {"AC","AP","AD","AT"};
-	string Cuarteto2[4] = {"2C","2P","2D","2T"};
-	string Cuarteto3[4] = {"3C","3P","3D","3T"};
-	string Cuarteto4[4] = {"4C","4P","4D","4T"};
-	string Cuarteto5[4] = {"5C","5P","5D","5T"};
-	string Cuarteto6[4] = {"6C","6P","6D","6T"};
-	string Cuarteto7[4] = {"7C","7P","7D","7T"};
-	string Cuarteto8[4] = {"8C","8P","8D","8T"};
-	string Cuarteto9[4] = {"9C","9P","9D","9T"};
-	string Cuarteto10[4] = {"10C","10P","10D","10T"};
-	string Cuarteto11[4] = {"JC","JP","JD","JT"};
-	string Cuarteto12[4] = {"QC","QP","QD","QT"};
-	string Cuarteto13[4] = {"KC","KP","KD","KT"};
-
-	int contador1 = 1;
-	int contador2 = 1;
-	int contador3 = 1;
-	int contador4 = 1;
-	int contador5 = 1;
-	int contador6 = 1;
-	int contador7 = 1;
-	int contador8 = 1;
-	int contador9 = 1;
-	int contador10 = 1;
-	int contador11 = 1;
-	int contador12 = 1;
-	int contador13 = 1;
-
-	for (int i = 0; i < 5; ++i)
-	{
-		for (int j = 0; j < 5; ++j)
-		{
-			if (Cuarteto1[i] == mano[j])
-			{
-				contador1++;
-			}
-			if (Cuarteto2[i] == mano[j])
-			{
-				contador2++;
-			}
-			if (Cuarteto3[i] == mano[j])
-			{
-				contador3++;
-			}
-			if (Cuarteto4[i] == mano[j])
-			{
-				contador4++;
-			}
-			if (Cuarteto5[i] == mano[j])
-			{
-				contador5++;
-			}
-			if (Cuarteto6[i] == mano[j])
-			{
-				contador6++;
-			}
-			if (Cuarteto7[i] == mano[j])
-			{
-				contador7++;
-			}
-			if (Cuarteto8[i] == mano[j])
-			{
-				contador8++;
-			}
-			if (Cuarteto9[i] == mano[j])
-			{
-				contador9++;
-			}
-			if (Cuarteto10[i] == mano[j])
-			{
-				contador10++;
-			}
-			if (Cuarteto11[i] == mano[j])
-			{
-				contador11++;
-			}
-			if (Cuarteto12[i] == mano[j])
-			{
-				contador12++;
-			}
-			if (Cuarteto13[i] == mano[j])
-			{
-				contador13++;
-			}
-		}
-	}
-	if (contador1 == 5 || contador2 == 5 || contador3 == 5 || contador4 == 5 || contador5 == 5 || contador6 == 5 || contador7 == 5 || contador8 == 5|| contador9 == 5 || contador10 == 5 || contador11 == 5 || contador12 == 5 || contador13 == 5)
-	{
-		return true;
-	}
-	else{
-		return false;
-	}
-
-}
-
-
-void EvaluaPares(string mano[]){
+void EvaluaPares(string mano[],bool gane[]){
 	string cartas[52] = {"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC","AP","2P","3P","4P","5P","6P","7P","8P","9P","10P","JP","QP","KP","AD","2D","3D","4D","5D","6D","7D","8D","9D","10D","JD","QD","KD","AT","2T","3T","4T","5T","6T","7T","8T","9T","10T","JT","QT","KT"};
 	int posiciones[5];
 	int prueba;
@@ -604,18 +524,29 @@ void EvaluaPares(string mano[]){
 			posiciones[i] = -1;
 		}
 	}
-	for (int i = 0; i < 5; ++i)
+	
+	if (pares1 == 4 || pares2 == 4 || pares3 == 4 || pares4 == 4)
 	{
-		cout << posiciones[i] << endl;
+		gane[2] = true;
+	} else if ((pares1 == 3 || pares2 == 3 || pares3 == 3 || pares4 == 3) && (pares1 == 2 || pares2 == 2 || pares3 == 2 || pares4 == 2))
+	{
+		gane[3] = true;
+	}else if (color1 == 5 || color2 == 5 || color3 == 5 || color4 == 5)
+	{
+		gane[4] = true;
+	}else if ((pares1 == 3 || pares2 == 3 || pares3 == 3 || pares4 == 3))
+	{
+		gane[6] = true;
+	}else if ((pares1 == 2 && pares2 == 2) ||  (pares1 == 2 && pares3 == 2) || (pares1 == 2 && pares4 == 2) || (pares2 == 2 && pares3 == 2) || (pares2 == 2 && pares4 == 2) || (pares3 == 2 && pares4 == 2))
+	{
+		gane[7] = true;
+	}else if ((pares1 == 2 || pares2 == 2 || pares3 == 2 || pares4 == 2))
+	{
+		gane[8] = true;
 	}
-	cout << "--------------" << endl;
-	cout << pares1 << endl;
-	cout << pares2 << endl;
-	cout << pares3 << endl;
-	cout << pares4 << endl;
 }
 
-void Escalera(string mano[]){
+bool Escalera(string mano[]){
 	string cartas[52] = {"AC","2C","3C","4C","5C","6C","7C","8C","9C","10C","JC","QC","KC","AP","2P","3P","4P","5P","6P","7P","8P","9P","10P","JP","QP","KP","AD","2D","3D","4D","5D","6D","7D","8D","9D","10D","JD","QD","KD","AT","2T","3T","4T","5T","6T","7T","8T","9T","10T","JT","QT","KT"};
 	int Escalera1[4] = {0,13,26,39};
 	int Escalera2[4] = {1,14,27,40};
@@ -723,7 +654,9 @@ void Escalera(string mano[]){
 
 	if ((numerosDeCartas[1] == (numerosDeCartas[0] + 1)) && (numerosDeCartas[2] == (numerosDeCartas[1] + 1)) && (numerosDeCartas[3] == (numerosDeCartas[2] + 1)) && (numerosDeCartas[4] == (numerosDeCartas[3] + 1)))
 	{
-		cout << "Gano por Escalera" << endl;
+		return true;
+	}else{
+		return false;
 	}
-	
 }
+

@@ -3,10 +3,13 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <fstream>
 using std::string;
 using std::cout;
 using std::endl;
 using std::cin;
+using std::ofstream;
+using std::ifstream;
 
 void mostrar1(string[],string[],int);
 void Selecion(string[],string[],int);
@@ -15,7 +18,6 @@ void EvaluaPares(string[],bool[]);
 bool GaneEscaleraColor(string[]);
 bool Escalera(string[]);
 void cleanScreen();
-void tabla();
 
 
 int main(int argc, char const *argv[])
@@ -39,49 +41,68 @@ int main(int argc, char const *argv[])
 	init_pair(1,COLOR_CYAN,COLOR_BLACK);
 	attron(COLOR_PAIR(1));
 	int opcion;
-	mvprintw(0,0,"Bienvenido ingrese cualquier numero para entrar y 3 para Salir.");
+	mvprintw(0,0,"Bienvenido ingrese cualquier numero para entrar y 2 para Salir.");
 	opcion = getch()-'0';
-	while(opcion != 3){
-		mvprintw(0,0,"Ingrese una opcion:\n1.Nuevo Juego.\n2.Cargar Dineros\n3.Salir");
+	while(opcion != 2){
+		mvprintw(0,0,"Ingrese una opcion:\n1.Nuevo Juego.\n2.Salir");
 		opcion = getch()-'0';
 		int CargarDinero = 0;
 		cleanScreen();
 		if (opcion == 1)
 		{
+			int opcion2;
+			mvprintw(0,0,"Quiere Cargar dinero de la partida Anterior?1.Si, Cualquier otro para NO.");
+			opcion2 = getch()-'0';
+			if (opcion2 == 1)
+			{
+				cleanScreen();
+				ifstream fe("DineroJugador.txt");
+				while(!fe.eof()){
+					fe >> DineroUsuario;
+				}
+				fe.close();
+				mvprintw(13,0,"Felicidades ha Cargado su dinero. :3");
+			}else{
+				DineroUsuario = 0;
+			}
 			//Inicio de juego.
 			//cout << "Ingrese cuanto de dinero tiene: " << endl;
 			int control;
 			char valores;
 			string datos = "";
 			cleanScreen();
-			mvprintw(5,0,"Ingrese cuanto de dinero tiene: ");
-			while((control=getch())!=10){
-				mvprintw(5,0,"Ingrese cuanto de dinero tiene: ");
-				if (control > 47 && control < 58)
-				{
-					valores=control;
-					datos.push_back(valores);
-					mvprintw(6,0,"%s",datos.c_str());
-				}
-				else{
-					mvprintw(6,0,"%s",datos.c_str());
-				}
-				DineroUsuario = atoi(datos.c_str());
-			}
-			datos.clear();
-			cleanScreen();
-
-			mvprintw(10,0,"Cuanto dinero quiere apostar?: ");
-			while(UsuarioApuesta == 0 || UsuarioApuesta>DineroUsuario){
+			if (DineroUsuario <= 0)
+			{
+				mvprintw(0,0,"Ingrese cuanto de dinero tiene: ");
 				while((control=getch())!=10){
-					mvprintw(10,0,"Cuanto dinero quiere apostar?: ");
+					mvprintw(0,0,"Ingrese cuanto de dinero tiene: ");
 					if (control > 47 && control < 58)
 					{
 						valores=control;
 						datos.push_back(valores);
-						mvprintw(11,0,"%s",datos.c_str());
+						mvprintw(0,32,"%s",datos.c_str());
+					}
+					else{
+						mvprintw(0,32,"%s",datos.c_str());
+					}
+					DineroUsuario = atoi(datos.c_str());
+				}
+				datos.clear();
+				cleanScreen();
+			}
+
+			mvprintw(0,0,"Usted tiene un balance de: %d", DineroUsuario);
+			mvprintw(2,0,"Cuanto dinero quiere apostar?: ");
+			while(UsuarioApuesta == 0 || UsuarioApuesta>DineroUsuario){
+				while((control=getch())!=10){
+					mvprintw(2,0,"Cuanto dinero quiere apostar?: ");
+					if (control > 47 && control < 58)
+					{
+						valores=control;
+						datos.push_back(valores);
+						mvprintw(2,31,"%s",datos.c_str());
 					}else{
-						mvprintw(11,0,"%s",datos.c_str());
+						mvprintw(2,31,"%s",datos.c_str());
 					}
 					UsuarioApuesta = atoi(datos.c_str());
 				}
@@ -94,12 +115,32 @@ int main(int argc, char const *argv[])
 
 			//Jugar llenando la mano.
 			int tamanoMano = 5;
-			void tabla();
-			mvprintw(10,50,"Estas son sus cartas :3");
+			mvprintw(0,65,"****************************************");
+			mvprintw(1,65,"*\t0.Royal Flush - 250x\t\t*");
+			mvprintw(2,65,"*\t1.Straight Flush - 50x\t\t*");
+			mvprintw(3,65,"*\t2.Four of a Kind - 25x\t\t*");
+			mvprintw(4,65,"*\t3.Full House - 6x to 9x\t\t*");
+			mvprintw(5,65,"*\t4.Flush - 5x or 6x\t\t*");
+			mvprintw(6,65,"*\t5.Straight - 4x\t\t\t*");
+			mvprintw(7,65,"*\t6.Three of a Kind - 3x\t\t*");
+			mvprintw(8,65,"*\t7.Two Pair - 2x\t\t\t*");
+			mvprintw(9,65,"*\t8.Pair of Jacks or Better - 1x\t*");
+			mvprintw(10,65,"****************************************");
+
+			mvprintw(0,30,"----------------------------");
+			mvprintw(1,30,"* Significado de las cartas*");
+			mvprintw(2,30,"* D: Diamante\t\t *");
+			mvprintw(3,30,"* C: Corazon\t\t *");
+			mvprintw(4,30,"* P: Pica\t\t\t *");
+			mvprintw(5,30,"* T: Trebol\t\t *");
+			mvprintw(6,30,"----------------------------");
+			
+			mvprintw(0,0,"Estas son sus cartas :3");
 			mostrar1(cartas,juego1,tamanoMano);
 			for (int i = 0; i < 5; ++i)
 			{
-				mvprintw(14,5*i,"%s",juego1[i].c_str());
+				mvprintw(4,5*i,"%s",juego1[i].c_str());
+				mvprintw(5,i*5,"%d",i);
 				//cout << juego1[i] << "\t";
 			}
 
@@ -117,13 +158,13 @@ int main(int argc, char const *argv[])
 			// 	tamanoMano = atoi(datos.c_str());
 			// }
 			// datos.clear();
-			mvprintw(19,0,"Cuantas cartas quiere?: ");
+			mvprintw(7,0,"Cuantas cartas quiere?: ");
 			tamanoMano = getch()-'0';
 			//cout << "Cuantas cartas quiere?: " << endl;
 			//cin >> tamanoMano;
 
 			//Si no muestra nada Culpa de esto de abajo.
-			cleanScreen();
+
 			if (tamanoMano < 5)
 			{
 				Selecion(juego1,mano,tamanoMano);
@@ -137,14 +178,28 @@ int main(int argc, char const *argv[])
 					mano[tamanoMano + i] = juego1[i];
 				}
 			}
-			
-			for (int i = 0; i < 5; ++i)
-			{
-				mvprintw(26,3*i,"%s",mano[i].c_str());
-				//cout << mano[i] << "\t";
-			}
-			
-			cout << endl;
+			cleanScreen();
+			mvprintw(0,65,"****************************************");
+			mvprintw(1,65,"*\t0.Royal Flush - 250x\t\t*");
+			mvprintw(2,65,"*\t1.Straight Flush - 50x\t\t*");
+			mvprintw(3,65,"*\t2.Four of a Kind - 25x\t\t*");
+			mvprintw(4,65,"*\t3.Full House - 6x to 9x\t\t*");
+			mvprintw(5,65,"*\t4.Flush - 5x or 6x\t\t*");
+			mvprintw(6,65,"*\t5.Straight - 4x\t\t\t*");
+			mvprintw(7,65,"*\t6.Three of a Kind - 3x\t\t*");
+			mvprintw(8,65,"*\t7.Two Pair - 2x\t\t\t*");
+			mvprintw(9,65,"*\t8.Pair of Jacks or Better - 1x\t*");
+			mvprintw(10,65,"****************************************");
+
+			mvprintw(0,30,"----------------------------");
+			mvprintw(1,30,"* Significado de las cartas*");
+			mvprintw(2,30,"* D: Diamante\t\t *");
+			mvprintw(3,30,"* C: Corazon\t\t *");
+			mvprintw(4,30,"* P: Pica\t\t\t *");
+			mvprintw(5,30,"* T: Trebol\t\t *");
+			mvprintw(6,30,"----------------------------");
+			mvprintw(0,0,"Estas son sus nuevas cartas :3");
+
 			//Juega con los dos turnos.
 			mano[0] = "JC";
 			mano[1] = "JD";
@@ -152,6 +207,12 @@ int main(int argc, char const *argv[])
 			mano[3] = "6C";
 			mano[4] = "3D";
 
+			for (int i = 0; i < 5; ++i)
+			{
+				mvprintw(3,5*i,"%s",mano[i].c_str());
+				//cout << mano[i] << "\t";
+			}
+			
 			verificar[0] = GaneRoyal(mano);
 			verificar[1] = GaneEscaleraColor(mano);
 			verificar[5] = Escalera(mano);
@@ -163,106 +224,117 @@ int main(int argc, char const *argv[])
 			{
 				if (verificar[i] == true)
 				{
-					mvprintw(0,0,"Ganado de la forma: %d",i);
+					mvprintw(7,0,"Ganado de la forma: %d",i);
 					//cout << "Gano " << i;
 					Victoria = i;
 					break;
 				}
 			}
-			void tabla();
 			if (Victoria == -1)
 			{
-				mvprintw(5,0,"Usted es un Perdedor.");
+				mvprintw(8,0,"Usted es un Perdedor.");
 				//cout << "Usted es un Perdedor." << endl;
 			}else if (Victoria == 0)
 			{
 				UsuarioApuesta = UsuarioApuesta * 250;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				//cout << "Ha ganado: " << UsuarioApuesta;
 				//cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 1)
 			{
 				UsuarioApuesta = UsuarioApuesta * 50;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 2)
 			{
 				UsuarioApuesta = UsuarioApuesta * 25;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 3)
 			{
 				UsuarioApuesta = UsuarioApuesta * 6;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 4)
 			{
 				UsuarioApuesta = UsuarioApuesta * 5;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 5)
 			{
 				UsuarioApuesta = UsuarioApuesta * 4;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 6)
 			{
 				UsuarioApuesta = UsuarioApuesta * 3;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario;
 			}else if (Victoria == 7)
 			{
 				UsuarioApuesta = UsuarioApuesta * 2;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta << endl;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
 			}else if (Victoria == 8)
 			{
 				UsuarioApuesta = UsuarioApuesta * 1;
 				DineroUsuario = DineroUsuario + UsuarioApuesta;
-				CargarDinero = CargarDinero + DineroUsuario;
-				mvprintw(5,0,"Ha ganado: %d",UsuarioApuesta);
-				mvprintw(6,0,"Ha ganado: %d",DineroUsuario);
+				
+				mvprintw(8,0,"Ha ganado: %d",UsuarioApuesta);
+				mvprintw(9,0,"Ha ganado: %d",DineroUsuario);
 				// cout << "Ha ganado: " << UsuarioApuesta << endl;
 				// cout << "Su nuevo Fondo es: " << DineroUsuario << endl;
 			}
-			cout << endl;
+
+			int guardado;
+			mvprintw(11,0,"Desea Guardar? 1.Si, Cualquier otro numero para NO.");
+			mvprintw(12,0,"Nota al no guardar se tomara como un nuevo juego la proxima vez que entre.");
+			guardado = getch()-'0';
+			ofstream fs("DineroJugador.txt");
+			if (guardado == 1)
+			{
+				fs << DineroUsuario;
+				mvprintw(14,0,"Felicidades ha guardado su dinero. :3");
+			}else{
+				fs << 0;
+				mvprintw(14,0,"Felicidades usted NO ha guardado su dinero. :3");
+			}
+			fs.close();
 			
-		}else if (opcion == 2)
-		{
+			getch();
 			cleanScreen();
-			mvprintw(10,20,"Felicidades ha guardado su dinero. :3");
-			DineroUsuario = DineroUsuario + CargarDinero;
+			
 		}
 	}
 	
@@ -271,10 +343,6 @@ int main(int argc, char const *argv[])
 	
 	endwin();
 	return 0;
-}
-
-void tabla(){
-	mvprintw(10,0,"*****************************************\n*\tRoyal Flush - 250x\t\t*\n*\tStraight Flush - 50x\t\t*\n*\tFour of a Kind - 25x\t\t*\n*\tFull House - 6x to 9x\t\t*\n*\tFlush - 5x or 6x\t\t*\n*\tStraight - 4x\t\t\t*\n*\tThree of a Kind - 3x\t\t*\n*\tTwo Pair - 2x\t\t\t*\n*\tPair of Jacks or Better - 1x\t*\n*****************************************");
 }
 
 void cleanScreen(){
@@ -316,7 +384,7 @@ void Selecion(string juego1[], string mano[],int tamano){
 	char valores;
 	string datos = "";
 
-	for (int i = 0; i < tamano; ++i)
+	for (int i = 1; i <= tamano; ++i)
 	{
 		/*//mvprintw(0,0,"1");
 		mvprintw(22,0,"Escoja la posicion: ");
@@ -344,9 +412,8 @@ void Selecion(string juego1[], string mano[],int tamano){
 		//addstr("Escoja la posicion: ");
 		//getnstr(valores,posicion);
 		//posicion = valores - 48;*/
-		mvprintw(22,0,"Escoja la posicion: ");
+		mvprintw(9,0,"Escoja la carta%d ",i);
 		posicion = getch()-'0';
-		mvprintw(0,0,"%d",posicion);
 		//cout << "Escoja la posicion: " << endl;
 		//cin >> posicion;
 		mano[i] = juego1[posicion];
